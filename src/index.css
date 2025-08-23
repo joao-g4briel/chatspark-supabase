@@ -2,6 +2,108 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --background: 220 14% 96%;
+  --foreground: 220 9% 15%;
+  --card: 0 0% 100%;
+  --card-foreground: 220 9% 15%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 220 9% 15%;
+  --primary: 200 89% 47%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 210 40% 98%;
+  --secondary-foreground: 220 9% 15%;
+  --muted: 210 40% 96%;
+  --muted-foreground: 215 16% 47%;
+  --accent: 210 40% 94%;
+  --accent-foreground: 220 9% 15%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 200 89% 47%;
+  --radius: 0.5rem;
+
+  /* Chat-specific colors */
+  --chat-user: 200 89% 47%;
+  --chat-user-foreground: 0 0% 100%;
+  --chat-bot: 220 13% 91%;
+  --chat-bot-foreground: 220 9% 15%;
+  
+  /* Gradients */
+  --gradient-primary: linear-gradient(135deg, hsl(200 89% 47%), hsl(210 89% 52%));
+  --gradient-background: linear-gradient(180deg, hsl(220 14% 96%), hsl(210 40% 98%));
+}
+
+.dark {
+  --background: 220 13% 11%;
+  --foreground: 210 40% 98%;
+  --card: 220 13% 13%;
+  --card-foreground: 210 40% 98%;
+  --popover: 220 13% 13%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 200 89% 47%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 13% 18%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 220 13% 18%;
+  --muted-foreground: 215 20% 65%;
+  --accent: 220 13% 18%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 63% 31%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 220 13% 18%;
+  --input: 220 13% 18%;
+  --ring: 200 89% 47%;
+
+  /* Chat-specific colors for dark mode */
+  --chat-user: 200 89% 47%;
+  --chat-user-foreground: 0 0% 100%;
+  --chat-bot: 220 13% 18%;
+  --chat-bot-foreground: 210 40% 98%;
+  
+  /* Dark gradients */
+  --gradient-primary: linear-gradient(135deg, hsl(200 89% 47%), hsl(210 89% 52%));
+  --gradient-background: linear-gradient(180deg, hsl(220 13% 11%), hsl(220 13% 13%));
+}
+
+* {
+  border-color: hsl(var(--border));
+}
+
+body {
+  color: hsl(var(--foreground));
+  background: var(--gradient-background);
+  font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+@layer utilities {
+  .chat-message-enter {
+    animation: chat-enter 0.3s ease-out;
+  }
+  
+  .chat-message-user {
+    background: hsl(var(--chat-user));
+    color: hsl(var(--chat-user-foreground));
+  }
+  
+  .chat-message-bot {
+    background: hsl(var(--chat-bot));
+    color: hsl(var(--chat-bot-foreground));
+  }
+}
+
+@keyframes chat-enter {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
 All colors MUST be HSL.
 */
