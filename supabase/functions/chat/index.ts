@@ -60,7 +60,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'gpt-oss20b',
+        model: 'openai/gpt-oss-20b:free',
         messages: [
           {
             role: 'system',
