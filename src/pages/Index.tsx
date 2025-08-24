@@ -1,7 +1,7 @@
-import { ChatContainer } from "@/components/Chat/ChatContainer";
+import { ChatLayout } from "@/components/Chat/ChatLayout";
 
 const Index = () => {
-  return <ChatContainer />;
+  return <ChatLayout />;
 };
 
 export default Index;
