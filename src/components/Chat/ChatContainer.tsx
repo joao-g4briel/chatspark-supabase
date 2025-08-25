@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
@@ -22,6 +22,16 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
   const [isLoading, setIsLoading] = useState(false);
   const [streamingMessage, setStreamingMessage] = useState<string>("");
   const { toast } = useToast();
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to bottom when new messages arrive
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, streamingMessage]);
 
   // Load messages for current chat
   const loadMessages = async (currentChatId: string) => {
@@ -72,7 +82,9 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
   };
 
   const sendMessage = async (content: string) => {
-    if (!chatId) {
+    let currentChatId = chatId;
+    
+    if (!currentChatId) {
       // Create new chat if none exists
       try {
         const { data, error } = await supabase
@@ -83,8 +95,8 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
 
         if (error) throw error;
         
+        currentChatId = data.id;
         onChatCreated?.(data.id);
-        return;
       } catch (error) {
         console.error('Erro ao criar chat:', error);
         toast({
@@ -107,7 +119,7 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
     };
 
     setMessages(prev => [...prev, userMessage]);
-    await saveMessage(chatId, content, true);
+    await saveMessage(currentChatId, content, true);
 
     try {
       const { data, error } = await supabase.functions.invoke('chat', {
@@ -144,7 +156,7 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
 
       setMessages(prev => [...prev, botMessage]);
       setStreamingMessage("");
-      await saveMessage(chatId, botResponse, false);
+      await saveMessage(currentChatId, botResponse, false);
 
     } catch (error) {
       console.error('Erro ao enviar mensagem:', error);
@@ -235,6 +247,8 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
             timestamp={new Date()}
           />
         )}
+        
+        <div ref={messagesEndRef} />
       </div>
 
       <div className="border-t border-border/50 bg-surface/80 backdrop-blur-sm">
