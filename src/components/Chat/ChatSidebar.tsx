@@ -24,9 +24,13 @@ export const ChatSidebar = ({ activeChat, onChatSelect, onNewChat }: ChatSidebar
 
   const loadChats = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
       const { data, error } = await supabase
         .from('chats')
         .select('*')
+        .eq('user_id', user.id)
         .order('updated_at', { ascending: false });
 
       if (error) throw error;
@@ -45,9 +49,15 @@ export const ChatSidebar = ({ activeChat, onChatSelect, onNewChat }: ChatSidebar
 
   const createNewChat = async () => {
     try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
       const { data, error } = await supabase
         .from('chats')
-        .insert({ title: 'Nova Conversa' })
+        .insert({ 
+          title: 'Nova Conversa',
+          user_id: user.id
+        })
         .select()
         .single();
 

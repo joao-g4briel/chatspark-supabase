@@ -1,7 +1,7 @@
-import { ChatLayout } from "@/components/Chat/ChatLayout";
+import { AuthGuard } from "@/components/Chat/AuthGuard";
 
 const Index = () => {
-  return <ChatLayout />;
+  return <AuthGuard />;
 };
 
 export default Index;

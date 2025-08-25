@@ -66,6 +66,7 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
           chat_id: chatId,
           content,
           is_user: isUser,
+          user_id: (await supabase.auth.getUser()).data.user?.id,
         });
 
       if (error) throw error;
@@ -89,7 +90,10 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
       try {
         const { data, error } = await supabase
           .from('chats')
-          .insert({ title: content.slice(0, 50) + (content.length > 50 ? '...' : '') })
+          .insert({ 
+            title: content.slice(0, 50) + (content.length > 50 ? '...' : ''),
+            user_id: (await supabase.auth.getUser()).data.user?.id
+          })
           .select()
           .single();
 
@@ -197,8 +201,8 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
           <Bot className="w-5 h-5 text-primary" />
         </div>
         <div>
-          <h1 className="text-xl font-semibold text-foreground">Jarvis4 AI</h1>
-          <p className="text-sm text-muted-foreground">Seu assistente inteligente</p>
+          <h1 className="text-xl font-semibold text-foreground">Jarvis</h1>
+          <p className="text-sm text-muted-foreground">Feito pela DTEC</p>
         </div>
       </header>
 
@@ -209,7 +213,7 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
               <Bot className="w-8 h-8 text-primary" />
             </div>
             <div className="space-y-2">
-              <h2 className="text-xl font-semibold text-foreground">Bem-vindo ao Jarvis4 AI</h2>
+              <h2 className="text-xl font-semibold text-foreground">Bem-vindo ao Jarvis</h2>
               <p className="text-muted-foreground max-w-md">
                 Olá! Sou seu assistente virtual. Posso ajudar com diversas tarefas, responder perguntas e muito mais. Como posso ajudá-lo hoje?
               </p>

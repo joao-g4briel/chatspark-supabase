@@ -20,18 +20,21 @@ export type Database = {
           id: string
           title: string
           updated_at: string
+          user_id: string | null
         }
         Insert: {
           created_at?: string
           id?: string
           title?: string
           updated_at?: string
+          user_id?: string | null
         }
         Update: {
           created_at?: string
           id?: string
           title?: string
           updated_at?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -66,6 +69,7 @@ export type Database = {
           created_at: string
           id: string
           is_user: boolean
+          user_id: string | null
         }
         Insert: {
           chat_id: string
@@ -73,6 +77,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_user?: boolean
+          user_id?: string | null
         }
         Update: {
           chat_id?: string
@@ -80,6 +85,7 @@ export type Database = {
           created_at?: string
           id?: string
           is_user?: boolean
+          user_id?: string | null
         }
         Relationships: [
           {
