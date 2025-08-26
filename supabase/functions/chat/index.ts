@@ -34,6 +34,34 @@ serve(async (req) => {
       );
     }
 
+    // Função para buscar informações na web
+    async function searchWeb(query: string): Promise<string> {
+      try {
+        const searchResponse = await fetch(`https://ddg-api.herokuapp.com/search?query=${encodeURIComponent(query)}&limit=5`);
+        if (!searchResponse.ok) return '';
+        
+        const searchData = await searchResponse.json();
+        if (!searchData || !searchData.length) return '';
+        
+        const results = searchData.slice(0, 3).map((item: any) => 
+          `${item.title}: ${item.description}`
+        ).join('\n\n');
+        
+        return results ? `Informações atuais da web:\n${results}\n\n` : '';
+      } catch (error) {
+        console.error('Erro na busca web:', error);
+        return '';
+      }
+    }
+
+    // Realizar busca web para perguntas que podem se beneficiar de informações atuais
+    let webSearchResults = '';
+    const shouldSearch = /\b(hoje|atual|recente|última|novo|nova|aconteceu|quando|onde|preço|cotação|notícia|covid|política|economia|esporte|tecnologia|2024|2025)\b/i.test(message);
+    
+    if (shouldSearch) {
+      webSearchResults = await searchWeb(message);
+    }
+
     // Get API key from database
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseAnonKey = Deno.env.get('SUPABASE_ANON_KEY')!;
@@ -77,7 +105,7 @@ serve(async (req) => {
           },
           {
             role: 'user',
-            content: message
+            content: webSearchResults + message
           }
         ]
       }),
