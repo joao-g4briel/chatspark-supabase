@@ -10,7 +10,10 @@ const corsHeaders = {
 // Função para limpar pensamentos internos da resposta
 function limparResposta(texto: string): string {
   // Remove tudo entre <think>...</think>
-  return texto.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+  let resultado = texto.replace(/<think>[\s\S]*?<\/think>/g, '');
+  // Remove tudo entre ◁think▷...◁/think▷
+  resultado = resultado.replace(/◁think▷[\s\S]*?◁\/think▷/g, '');
+  return resultado.trim();
 }
 
 serve(async (req) => {
