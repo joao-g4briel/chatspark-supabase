@@ -69,7 +69,7 @@ serve(async (req) => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'moonshotai/kimi-vl-a3b-thinking:free',
+        model: 'deepseek/deepseek-r1-0528-qwen3-8b:free',
         messages: [
           {
             role: 'system',
