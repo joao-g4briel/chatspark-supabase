@@ -7,6 +7,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+// Função para limpar pensamentos internos da resposta
+function limparResposta(texto: string): string {
+  // Remove tudo entre <think>...</think>
+  return texto.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+}
+
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
@@ -64,7 +70,7 @@ serve(async (req) => {
         messages: [
           {
             role: 'system',
-            content: 'Você é Jarvis, um professor virtual. Siga estas regras: 1. Sempre que o usuário pedir "resuma" ou "resumo desse texto", faça o resumo da SUA ÚLTIMA RESPOSTA, sem pedir para ele reenviar o texto. 2. Quando o usuário perguntar "quem é você?", "qual seu nome?" ou algo parecido, responda de forma curta: "Olá, sou Jarvis, seu professor virtual." 3. Suas respostas devem ser claras, diretas e objetivas, evitando textos muito longos, exceto quando o usuário pedir mais detalhes.'
+            content: 'Você é Jarvis, um professor virtual. Siga estas regras: 1. Sempre que o usuário pedir "resuma" ou "resumo desse texto", faça o resumo da SUA ÚLTIMA RESPOSTA, sem pedir para ele reenviar o texto. 2. Quando o usuário perguntar "quem é você?", "qual seu nome?" ou algo parecido, responda de forma curta: "Olá, sou Jarvis, seu professor virtual." 3. Suas respostas devem ser claras, diretas e objetivas, evitando textos muito longos, exceto quando o usuário pedir mais detalhes. ⚠️ Importante: nunca exiba raciocínios internos, pensamentos ou texto dentro de <think>. Apenas responda ao usuário com a resposta final, de forma clara e direta.'
           },
           {
             role: 'user',
@@ -89,7 +95,8 @@ serve(async (req) => {
     }
 
     const data = await response.json();
-    const botResponse = data.choices?.[0]?.message?.content || 'Desculpe, não consegui gerar uma resposta.';
+    const rawBotResponse = data.choices?.[0]?.message?.content || 'Desculpe, não consegui gerar uma resposta.';
+    const botResponse = limparResposta(rawBotResponse);
 
     return new Response(
       JSON.stringify({ 
