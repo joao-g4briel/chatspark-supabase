@@ -7,10 +7,10 @@ import { componentTagger } from "lovable-tagger";
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
-    port: 3000,
+    port: 3100,
   },
   preview: {
-    port: 3000,
+    port: 3100,
     allowedHosts: ['jarvis.coolify.dtecchat.qzz.io'],
   },
   plugins: [
@@ -24,5 +24,6 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+
 
 
