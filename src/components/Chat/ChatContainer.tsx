@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { ChatMessage } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
+import { TypingIndicator } from "./TypingIndicator";
 import { useToast } from "@/hooks/use-toast";
 import { Bot } from "lucide-react";
 
@@ -243,6 +244,8 @@ export const ChatContainer = ({ chatId, onChatCreated }: ChatContainerProps) => 
             timestamp={message.timestamp}
           />
         ))}
+        
+        {isLoading && !streamingMessage && <TypingIndicator />}
         
         {streamingMessage && (
           <ChatMessage
