@@ -17,6 +17,12 @@ function limparResposta(texto: string): string {
 }
 
 serve(async (req) => {
+  // Log da requisição para debug
+  console.log('=== Chat Function Called ===');
+  console.log('Method:', req.method);
+  console.log('URL:', req.url);
+  console.log('Headers:', Object.fromEntries(req.headers.entries()));
+
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
@@ -24,7 +30,11 @@ serve(async (req) => {
   try {
     // Verificar se o corpo da requisição existe e não está vazio
     const body = await req.text();
+    console.log('Request body raw:', body);
+    console.log('Body length:', body?.length || 0);
+    
     if (!body || body.trim() === '') {
+      console.log('Error: Request body is empty');
       return new Response(
         JSON.stringify({ error: 'Request body is empty' }),
         { 
@@ -37,7 +47,9 @@ serve(async (req) => {
     let parsedBody;
     try {
       parsedBody = JSON.parse(body);
+      console.log('Parsed body:', parsedBody);
     } catch (parseError) {
+      console.log('JSON parse error:', parseError);
       return new Response(
         JSON.stringify({ error: 'Invalid JSON format' }),
         { 
@@ -48,6 +60,7 @@ serve(async (req) => {
     }
 
     const { message } = parsedBody;
+    console.log('Extracted message:', message);
 
     if (!message) {
       return new Response(
