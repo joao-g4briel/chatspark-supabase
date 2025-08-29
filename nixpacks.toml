@@ -1,3 +1,2 @@
 [phases.setup]
-nixPkgs = ["nodejs, "deno"]
-
+nixPkgs = ["nodejs", "deno"]
