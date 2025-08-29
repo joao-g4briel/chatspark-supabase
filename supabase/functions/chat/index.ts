@@ -21,10 +21,21 @@ serve(async (req) => {
   console.log('=== Chat Function Called ===');
   console.log('Method:', req.method);
   console.log('URL:', req.url);
-  console.log('Headers:', Object.fromEntries(req.headers.entries()));
 
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
+  }
+
+  // Only accept POST requests for chat functionality
+  if (req.method !== 'POST') {
+    return new Response(
+      JSON.stringify({ error: 'Method not allowed. Use POST.' }),
+      { 
+        status: 405,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      }
+    );
   }
 
   try {
