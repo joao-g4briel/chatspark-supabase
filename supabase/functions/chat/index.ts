@@ -22,7 +22,32 @@ serve(async (req) => {
   }
 
   try {
-    const { message } = await req.json();
+    // Verificar se o corpo da requisição existe e não está vazio
+    const body = await req.text();
+    if (!body || body.trim() === '') {
+      return new Response(
+        JSON.stringify({ error: 'Request body is empty' }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    let parsedBody;
+    try {
+      parsedBody = JSON.parse(body);
+    } catch (parseError) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid JSON format' }),
+        { 
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        }
+      );
+    }
+
+    const { message } = parsedBody;
 
     if (!message) {
       return new Response(
