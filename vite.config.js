@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => ({
   },
   preview: {
     port: 3000,
-    allowedHosts: ['jarvis.coolify.dtechchat.qzz.io'],
+    allowedHosts: ['jarvis.coolify.dtecchat.qzz.io'],
   },
   plugins: [
     react(),
@@ -24,4 +24,5 @@ export default defineConfig(({ mode }) => ({
     },
   },
 }));
+
 
